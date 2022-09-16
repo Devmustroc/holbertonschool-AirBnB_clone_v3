@@ -22,3 +22,22 @@ def cities_get(state_id):
     if dictionaryCityInState is None:
         abort(404)
     return jsonify([city.to_dict() for city in dictionaryCityInState.cities])
+
+@app_views.route('/cities/<string:city_id>',
+                 methods=['GET'],
+                 strict_slashes=False)
+def city_get(city_id):
+    """
+    La fonction city_get renvoie une réponse JSON contenant le dictionnaire
+    représentation de l'objet ville identifié par un identifiant donné. Si aucune de ces villes
+    existe, il renvoie un message d'erreur.
+
+    :param city_id : Récupère l'objet ville du stockage
+    :return: Un dictionnaire de l'objet ville
+    :doc-author: Trelent
+    """
+
+    dictionaryCity = storage.get("City", city_id)
+    if dictionaryCity is None:
+        abort(404)
+    return (jsonify(dictionaryCity.to_dict()))
