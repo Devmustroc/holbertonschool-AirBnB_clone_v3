@@ -41,3 +41,23 @@ def city_get(city_id):
     if dictionaryCity is None:
         abort(404)
     return (jsonify(dictionaryCity.to_dict()))
+
+@app_views.route('/cities/<string:city_id>',
+                 methods=['DELETE'],
+                 strict_slashes=False)
+def city_delete(city_id):
+    """
+    La fonction city_delete supprime un objet City de la base de données.
+    La fonction accepte un argument, city_id, qui est l'identifiant de la ville à supprimer.
+
+    :param city_id : identifie la ville à supprimer
+    :return: Un dictionnaire jsonifié avec une clé de statut et une valeur de ok
+    :doc-author: Trelent
+    """
+
+    dictionaryCity = storage.get("City", city_id)
+    if dictionaryCity is None:
+        abort(404)
+    dictionaryCity.delete()
+    storage.save()
+    return (jsonify({}))
