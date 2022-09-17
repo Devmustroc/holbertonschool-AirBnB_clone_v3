@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 """return JSON status on object app_views"""
 
-from flask import Flask, jsonify
+from flask import jsonify
+
 from api.v1.views import app_views
 from models import storage
 
@@ -12,7 +13,7 @@ def status():
     return jsonify({"status": "OK"})
 
 
-@app_views.route("/status", methods=["GET"])
+@app_views.route("/stats", methods=["GET"])
 def stats():
     """Return status api route"""
     data = {
@@ -23,5 +24,5 @@ def stats():
         "states": 27,
         "users": 31
     }
-    data = {ks : storage.count(val) for ks, val in data.items()}
+    data = {ks: storage.count(val) for ks, val in data.items()}
     return jsonify(data)
