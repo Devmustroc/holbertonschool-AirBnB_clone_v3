@@ -29,4 +29,3 @@ def stats():
              "reviews": reviews,
              "states": states,
              "users": users})
-
