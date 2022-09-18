@@ -10,12 +10,12 @@ from models.place import Place
 from models.user import User
 
 
-def getreview(review):
+def get_review(review):
     """Get reviews"""
     return (review.to_dict(), 200)
 
 
-def putreview(review):
+def put_review(review):
     """Update review"""
     if not request.is_json:
         abort(400, "Not a JSON")
@@ -31,7 +31,7 @@ def putreview(review):
     return (review.to_dict(), 200)
 
 
-def deletereview(review):
+def delete_review(review):
     """Delete reviews"""
     storage.delete(review)
     storage.save()
@@ -78,13 +78,13 @@ def reviews(place_id):
 @app_views.route('/reviews/<ident>', methods=['GET', 'PUT', 'DELETE'])
 def reviews_id(ident):
     """Retrieves a specific reviews"""
-    rev = storage.all("Review").values()
-    for p in rev:
+    reviews = storage.all("Review").values()
+    for p in reviews:
         if p.id == ident:
             if request.method == 'GET':
-                return getreview(p)
+                return get_review(p)
             elif request.method == 'PUT':
-                return putreview(p)
+                return put_review(p)
             elif request.method == 'DELETE':
-                return deletereview(p)
+                return delete_review(p)
     abort(404, 'Not found')
