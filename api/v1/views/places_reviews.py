@@ -11,12 +11,12 @@ from models.user import User
 
 
 def getreview(review):
-    """Get object"""
+    """Get reviews"""
     return (review.to_dict(), 200)
 
 
 def putreview(review):
-    """Update object"""
+    """Update review"""
     if not request.is_json:
         abort(400, "Not a JSON")
     new = request.get_json()
@@ -32,7 +32,7 @@ def putreview(review):
 
 
 def deletereview(review):
-    """Delete object"""
+    """Delete reviews"""
     storage.delete(review)
     storage.save()
     return ({}, 200)
@@ -40,7 +40,7 @@ def deletereview(review):
 
 @app_views.route('/places/<place_id>/reviews', methods=['GET', 'POST'])
 def reviews(place_id):
-    """Retrieves list of all objects"""
+    """Retrieves list of all reviews"""
     place = None
     for c in storage.all('Place').values():
         if c.id == place_id:
@@ -77,7 +77,7 @@ def reviews(place_id):
 
 @app_views.route('/reviews/<ident>', methods=['GET', 'PUT', 'DELETE'])
 def reviews_id(ident):
-    """Retrieves a specific object"""
+    """Retrieves a specific reviews"""
     rev = storage.all("Review").values()
     for p in rev:
         if p.id == ident:
