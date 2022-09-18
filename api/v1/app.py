@@ -13,13 +13,13 @@ app.register_blueprint(app_views)
 
 
 @app.teardown_appcontext
-def close():
+def close(exec):
     """Calls storage close method"""
     storage.close()
 
 
 @app.errorhandler(404)
-def not_found():
+def not_found(e):
     """Returns 404 error in JSON"""
     e = {"error": "Not found"}
     return e, 404
