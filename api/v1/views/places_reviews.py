@@ -1,86 +1,89 @@
 #!/usr/bin/python3
-'''
-    RESTful API actions for user object
-'''
-from flask import jsonify, abort, request
+"""
+Creates a new view for objects for all default API actions
+"""
+from flask import request, jsonify, abort
 
 from api.v1.views import app_views
 from models import storage
 from models.review import Review
 
 
-@app_views.route('/places/<place_id>/reviews', methods=['GET'],
-                 strict_slashes=False)
-def all_reviews(place_id):
-    """ Retrieves the list of all Review objects of a Place """
-    place = storage.get('Place', place_id)
+def getreview(review):
+    """Get object"""
+    return (review.to_dict(), 200)
+
+
+def putreview(review):
+    """Update object"""
+    if not request.is_json:
+        abort(400, "Not a JSON")
+    new = request.get_json()
+    for (k, v) in new.items():
+        if k != 'id' and \
+                k != 'created_at' and \
+                k != 'updated_at' and \
+                k != 'user_id' and \
+                k != 'place_id':
+            setattr(review, k, v)
+    storage.save()
+    return (review.to_dict(), 200)
+
+
+def deletereview(review):
+    """Delete object"""
+    storage.delete(review)
+    storage.save()
+    return ({}, 200)
+
+
+@app_views.route('/places/<place_id>/reviews', methods=['GET', 'POST'])
+def reviews(place_id):
+    """Retrieves list of all objects"""
+    place = None
+    for c in storage.all('Place').values():
+        if c.id == place_id:
+            place = c
     if place is None:
         abort(404)
-    obj = []
-    review_save = storage.all("Review")
-    for key, value in review_save.items():
-        if value.place_id == str(place_id):
-            place.append(value.to_dict())
-    return jsonify(place)
+    if request.method == 'GET':
+        all_reviews = []
+        for x in storage.all('Review').values():
+            if x.place_id == place_id:
+                all_reviews.append(x.to_dict())
+        return (jsonify(all_reviews), 200)
+    elif request.method == 'POST':
+        if not request.is_json:
+            abort(400, "Not a JSON")
+        new = request.get_json()
+        if 'name' not in new.keys():
+            return ({"error": "Missing name"}, 400)
+        if 'user_id' not in new.keys():
+            return ({"error": "Missing user_id"}, 400)
+        user_id = new['user_id']
+        y = [x.id for x in storage.all('User').values()]
+        if user_id not in y:
+            abort(404)
+        if 'text' not in new.keys():
+            return ({"error": "Missing text"}, 400)
+        x = Review()
+        for (k, v) in new.items():
+            setattr(x, k, v)
+        setattr(x, 'place_id', place_id)
+        x.save()
+        return (x.to_dict(), 201)
 
 
-@app_views.route('/review/<review_id>', methods=['GET'],
-                 strict_slashes=False)
-def get_review(review_id):
-    '''
-        Retrieve one review object
-    '''
-    try:
-        review = storage.get('Review', review_id)
-        return jsonify(review.to_dict())
-    except Exception:
-        abort(404)
-
-
-@app_views.route('/reviews/<review_id>', methods=['DELETE'],
-                 strict_slashes=False)
-def delete_review(review_id):
-    '''
-        Delete a review object
-    '''
-    try:
-        review_obj = storage.get('Review', review_id)
-        review_obj.delete()
-        return jsonify({}), 200
-    except Exception:
-        abort(404)
-
-
-@app_views.route('/places/<place_id>/reviews', methods=['POST'],
-                 strict_slashes=False)
-def post_review():
-    '''
-        Create a review object
-    '''
-    if not request.json:
-        return jsonify({"error": "Not a JSON"}), 400
-    if 'user_id' not in request.json:
-        return jsonify({"error": "Missing user_id"}), 400
-    new_review = Review(user_id=request.get_json(["user_id"]))
-    for key, value in request.get_json.items():
-        setattr(new_review, key, value)
-    new_review.save()
-    return (jsonify(new_review.to_dict()), 201)
-
-
-@app_views.route('/reviews/<review_id>', methods=['PUT'],
-                 strict_slashes=False)
-def put_review(review_id, obj_user=None):
-    '''
-        Update a review object
-    '''
-    obj_review = storage.get('Review', review_id)
-    if obj_review is None:
-        abort(404)
-    if not request.json:
-        return jsonify({"error": "Not a JSON"}), 400
-    for key, value in request.getjson():
-        if key not in ['id', 'created_at', 'user_id', 'updated_at']:
-            setattr(obj_user, key, value)
-    obj_review.save()
-    return (jsonify(obj_review.to_dict()), 200)
+@app_views.route('/reviews/<ident>', methods=['GET', 'PUT', 'DELETE'])
+def reviews_id(ident):
+    """Retrieves a specific object"""
+    reviews = storage.all("Review").values()
+    for p in reviews:
+        if p.id == ident:
+            if request.method == 'GET':
+                return getreview(p)
+            elif request.method == 'PUT':
+                return putreview(p)
+            elif request.method == 'DELETE':
+                return deletereview(p)
+    abort(404, 'Not found')
