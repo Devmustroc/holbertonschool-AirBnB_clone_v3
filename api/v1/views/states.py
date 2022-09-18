@@ -10,14 +10,14 @@ from models.state import State
 
 
 def getstate(state):
-    """Get object"""
+    """Get state"""
     if state is None:
         abort(404)
     return (jsonify(state.to_dict()), 200)
 
 
 def putstate(state):
-    """Update object"""
+    """ Update state"""
     if state is None:
         abort(404)
     if not request.is_json:
@@ -31,7 +31,7 @@ def putstate(state):
 
 
 def deletestate(state):
-    """Delete object"""
+    """Delete state"""
     if state is None:
         abort(404)
     storage.delete(state)
@@ -60,7 +60,7 @@ def states():
 
 @app_views.route('/states/<ident>', methods=['GET', 'PUT', 'DELETE'])
 def states_id(ident):
-    """Retrieves a specific object """
+    """Retrieves a specific state"""
     states = storage.all('State')
     for s in states.values():
         if s.id == ident:
