@@ -2,18 +2,19 @@
 """
 Creates a new view for objects for all default API actions
 """
-from flask import Flask, request, jsonify, abort
+from flask import request, jsonify, abort
+
 from api.v1.views import app_views
 from models import storage
 from models.city import City
 
 
-def getcity(city):
+def get_city(city):
     """Get a place"""
     return (city.to_dict(), 200)
 
 
-def putcity(city):
+def put_city(city):
     """Update a place"""
     if not request.is_json:
         abort(400, "Not a JSON")
@@ -25,7 +26,7 @@ def putcity(city):
     return (city.to_dict(), 200)
 
 
-def deletecity(city):
+def delete_city(city):
     """Delete a place"""
     storage.delete(city)
     storage.save()
@@ -33,7 +34,7 @@ def deletecity(city):
 
 
 @app_views.route('/states/<state_id>/cities', methods=['GET', 'POST'])
-def cities(state_id):
+def ret_cities(state_id):
     """Retrieves list of all places"""
     state = None
     for s in storage.all('State').values():
@@ -68,9 +69,9 @@ def cities_id(ident):
     for c in cities:
         if c.id == ident:
             if request.method == 'GET':
-                return getcity(c)
+                return get_city(c)
             elif request.method == 'PUT':
-                return putcity(c)
+                return put_city(c)
             elif request.method == 'DELETE':
-                return deletecity(c)
+                return delete_city(c)
     abort(404, 'Not found')
