@@ -2,19 +2,20 @@
 """
 Creates a new view for Amenity objects for all default API actions
 """
-from flask import Flask, request, jsonify, abort
+from flask import request, jsonify, abort
+
 from api.v1.views import app_views
 from models import storage
 from models.amenity import Amenity
 
 
-def getamenity(amen):
-    """Get object"""
+def get_amenity(amen):
+    """Get amenity"""
     return (amen.to_dict(), 200)
 
 
-def putamen(amen):
-    """Update object """
+def put_amenity(amen):
+    """Update amenity """
     if not request.is_json:
         abort(400, "Not a JSON")
     new = request.get_json()
@@ -25,8 +26,8 @@ def putamen(amen):
     return (amen.to_dict(), 200)
 
 
-def deleteamen(amen):
-    """Delete object """
+def delete_amen(amen):
+    """Delete amenity """
     storage.delete(amen)
     storage.save()
     return ({}, 200)
@@ -53,14 +54,14 @@ def amens():
 
 @app_views.route('/amenities/<ident>', methods=['GET', 'PUT', 'DELETE'])
 def amens_id(ident):
-    """Retrieves a specific object"""
-    amens = storage.all('Amenity')
-    for s in amens.values():
+    """Retrieves a specific amenity"""
+    s_amenity = storage.all('Amenity')
+    for s in s_amenity.values():
         if s.id == ident:
             if request.method == 'GET':
-                return getamenity(s)
+                return get_amenity(s)
             elif request.method == 'PUT':
-                return putamen(s)
+                return put_amenity(s)
             elif request.method == 'DELETE':
-                return deleteamen(s)
+                return delete_amen(s)
     abort(404, 'Not found')
