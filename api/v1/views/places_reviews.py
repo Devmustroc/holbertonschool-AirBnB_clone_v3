@@ -2,20 +2,21 @@
 """
 Creates a new view for objects for all default API actions
 """
-from flask import request, jsonify, abort
-
+from flask import Flask, request, jsonify, abort
 from api.v1.views import app_views
 from models import storage
 from models.review import Review
+from models.place import Place
+from models.user import User
 
 
 def getreview(review):
-    """Get object"""
+    """Get review"""
     return (review.to_dict(), 200)
 
 
 def putreview(review):
-    """Update object"""
+    """Updatea review"""
     if not request.is_json:
         abort(400, "Not a JSON")
     new = request.get_json()
@@ -31,7 +32,7 @@ def putreview(review):
 
 
 def deletereview(review):
-    """Delete object"""
+    """Delete review"""
     storage.delete(review)
     storage.save()
     return ({}, 200)
@@ -39,7 +40,7 @@ def deletereview(review):
 
 @app_views.route('/places/<place_id>/reviews', methods=['GET', 'POST'])
 def reviews(place_id):
-    """Retrieves list of all objects"""
+    """Retrieves list of all reviews"""
     place = None
     for c in storage.all('Place').values():
         if c.id == place_id:
@@ -76,7 +77,7 @@ def reviews(place_id):
 
 @app_views.route('/reviews/<ident>', methods=['GET', 'PUT', 'DELETE'])
 def reviews_id(ident):
-    """Retrieves a specific object"""
+    """Retrieves a specific reviews"""
     reviews = storage.all("Review").values()
     for p in reviews:
         if p.id == ident:

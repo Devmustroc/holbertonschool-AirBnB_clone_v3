@@ -5,17 +5,17 @@ Creates a new view for objects for all default API actions
 from flask import request, jsonify, abort
 
 from api.v1.views import app_views
-from models import storage, city
+from models import storage
 from models.place import Place
 
 
-def get_place(place):
-    """Get a place"""
-    return (city.to_dict(), 200)
+def getplace(place):
+    """Get palce"""
+    return (place.to_dict(), 200)
 
 
-def put_place(place):
-    """Update a place"""
+def putplace(place):
+    """Update place"""
     if not request.is_json:
         abort(400, "Not a JSON")
     new = request.get_json()
@@ -30,8 +30,8 @@ def put_place(place):
     return (place.to_dict(), 200)
 
 
-def delete_place(place):
-    """Delete a place"""
+def deleteplace(place):
+    """Delete object"""
     storage.delete(place)
     storage.save()
     return ({}, 200)
@@ -39,7 +39,7 @@ def delete_place(place):
 
 @app_views.route('/cities/<city_id>/places', methods=['GET', 'POST'])
 def places(city_id):
-    """Retrieves list of all objects"""
+    """Retrieves list of all places"""
     city = None
     for c in storage.all('City').values():
         if c.id == city_id:
@@ -72,17 +72,16 @@ def places(city_id):
         return (x.to_dict(), 201)
 
 
-
-@app_views.route('/cities/<ident>', methods=['GET', 'PUT', 'DELETE'])
+@app_views.route('/places/<ident>', methods=['GET', 'PUT', 'DELETE'])
 def places_id(ident):
-    """Retrieves a specific places"""
+    """Retrieves a specific place"""
     places = storage.all("Place").values()
     for p in places:
         if p.id == ident:
             if request.method == 'GET':
-                return get_place(p)
+                return getplace(p)
             elif request.method == 'PUT':
-                return put_place(p)
+                return putplace(p)
             elif request.method == 'DELETE':
-                return delete_place(p)
+                return deleteplace(p)
     abort(404, 'Not found')
