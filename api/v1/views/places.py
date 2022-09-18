@@ -9,12 +9,12 @@ from models.city import City
 
 
 def getcity(city):
-    """Get object"""
+    """Get a place"""
     return (city.to_dict(), 200)
 
 
 def putcity(city):
-    """Update object"""
+    """Update a place"""
     if not request.is_json:
         abort(400, "Not a JSON")
     new = request.get_json()
@@ -26,7 +26,7 @@ def putcity(city):
 
 
 def deletecity(city):
-    """Delete object"""
+    """Delete a place"""
     storage.delete(city)
     storage.save()
     return ({}, 200)
@@ -34,7 +34,7 @@ def deletecity(city):
 
 @app_views.route('/states/<state_id>/cities', methods=['GET', 'POST'])
 def cities(state_id):
-    """Retrieves list of all objects"""
+    """Retrieves list of all places"""
     state = None
     for s in storage.all('State').values():
         if s.id == state_id:
@@ -63,7 +63,7 @@ def cities(state_id):
 
 @app_views.route('/cities/<ident>', methods=['GET', 'PUT', 'DELETE'])
 def cities_id(ident):
-    """Retrieves a specific object"""
+    """Retrieves a specific place"""
     cities = storage.all("City").values()
     for c in cities:
         if c.id == ident:
