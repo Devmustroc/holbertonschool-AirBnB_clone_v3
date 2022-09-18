@@ -16,6 +16,7 @@ def close(exec):
     """call storage and close it"""
     storage.close()
 
+
 @app.errorhandler(404)
 def not_found(error):
     """handle error function"""

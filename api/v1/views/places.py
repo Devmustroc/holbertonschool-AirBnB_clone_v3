@@ -1,50 +1,51 @@
 #!/usr/bin/python3
 """
-Creates a new view for cities & all API actions
+Creates a new view for objects for all default API actions
 """
-from flask import request, jsonify, abort
+from flask import Flask, request, jsonify, abort
 from api.v1.views import app_views
 from models import storage
 from models.city import City
 
 
-def get_city(city):
-    """get City Object"""
+def getcity(city):
+    """Get object"""
     return (city.to_dict(), 200)
 
 
 def putcity(city):
-    """Update City Object"""
+    """Update object"""
     if not request.is_json:
-        abort(404, "Not a JSON")
+        abort(400, "Not a JSON")
     new = request.get_json()
-    for (ks, val) in new.items():
-        if ks != "id" and ks != "created_at" and ks != "updated_at":
-            setattr(city, ks, val)
+    for (k, v) in new.items():
+        if k != 'id' and k != 'created_at' and k != 'updated_at':
+            setattr(city, k, v)
     storage.save()
     return (city.to_dict(), 200)
 
 
 def deletecity(city):
-    """Delete City object"""
+    """Delete object"""
     storage.delete(city)
     storage.save()
     return ({}, 200)
 
 
-@app_views.route("/states/<state_id>/cities", methods=["GET", "POST"])
+@app_views.route('/states/<state_id>/cities', methods=['GET', 'POST'])
 def cities(state_id):
     """Retrieves list of all objects"""
     state = None
-    for sT in storage.all('state').value():
-        if sT.id == state_id:
-            state = sT
+    for s in storage.all('State').values():
+        if s.id == state_id:
+            state = s
     if state is None:
-        abort(400)
-    if request.method == "GET":
+        abort(404)
+    if request.method == 'GET':
         all_cities = []
-        for i in storage.all('City').values():
-            all_cities.append(i.to_dict())
+        for x in storage.all('City').values():
+            if x.state_id == state_id:
+                all_cities.append(x.to_dict())
         return (jsonify(all_cities), 200)
     elif request.method == 'POST':
         if not request.is_json:
@@ -60,8 +61,6 @@ def cities(state_id):
         return (x.to_dict(), 201)
 
 
-
-
 @app_views.route('/cities/<ident>', methods=['GET', 'PUT', 'DELETE'])
 def cities_id(ident):
     """Retrieves a specific object"""
@@ -69,7 +68,7 @@ def cities_id(ident):
     for c in cities:
         if c.id == ident:
             if request.method == 'GET':
-                return get_city(c)
+                return getcity(c)
             elif request.method == 'PUT':
                 return putcity(c)
             elif request.method == 'DELETE':
