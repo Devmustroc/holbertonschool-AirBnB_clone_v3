@@ -156,7 +156,18 @@ class TestFileStorage(unittest.TestCase):
 
     @unittest.skipIf(models.storage_t == 'db', "not testing db storage")
     def test_get(self):
-        """Testing the get methods from the db storage"""
+        """
+        La fonction test_get teste la méthode get de la classe de stockage.
+        Il crée de nouveaux objets State, City, User, Place et Review et les enregistre dans
+        le moteur de stockage. Il récupère ensuite chaque objet de la base de données en utilisant leur
+        identifiants uniques (id) et les compare à leur objet correspondant qui a été
+        enregistré en mémoire. La fonction test_get teste également le moment où des arguments non valides sont passés dans
+        la méthode de stockage get.
+
+        :param self : référence l'instance de classe
+        :return: None pour montrer que l'objet n'est pas dans le
+        :doc-author: Trelent
+        """
         newState = State(name="Alemaggne")
         newCity = City(name="Berlin", state_id=newState.id)
         newUser = User(email="namme@email.com",
