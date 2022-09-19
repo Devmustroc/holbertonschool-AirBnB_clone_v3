@@ -113,3 +113,42 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+    @unittest.skipIf(models.storage_t == 'db', "not testing db storage")
+    def test_count(self):
+        """
+        La fonction test_count est un test pour vérifier si la fonction count fonctionne
+        correctement. Il vérifie si le nombre d'objets créés est égal au nombre
+        d'objets comptés. La fonction test_count vérifie également que toutes les instances sont
+        compté et pas seulement un type d'instance.
+
+        :param self : référence l'instance de classe
+        :return : le nombre de toutes les instances dans la base de données
+        :doc-author: Trelent
+        """
+        currentStateInit = models.storage.count(State)
+        stateList = ["Suisse", "France", "Espagne", "Portugale"]
+        for stateName in stateList:
+            newState = State(name=stateName)
+            newState.save()
+        countStateResult= models.storage.count(State)
+        self.assertEqual(countStateResult - currentStateInit,
+                         len(stateList))
+        allInstance = models.storage.count()
+        self.assertEqual(allInstance - currentStateInit,
+                         len(stateList))
+        allemagneState = State(name="allemagne")
+        allemagneState.save()
+        countStateResult += 1
+        currentCityNumber = models.storage.count(City)
+        allemagneCity = ["Studgard", "Berlin"]
+        for cityName in allemagneCity:
+            newCity = City(name=cityName, state_id=allemagneState.id)
+            newCity.save()
+        countCity = models.storage.count(City)
+        self.assertEqual(countCity - currentCityNumber,
+                         len(allemagneCity))
+        allInstance = models.storage.count()
+        stateNumber = countStateResult - currentStateInit
+        cityNumber = countCity - currentCityNumber
+        allInstanceNumber = stateNumber + cityNumber
+        self.assertEqual(allInstanceNumber, allInstance)
