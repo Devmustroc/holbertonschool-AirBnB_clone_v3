@@ -152,3 +152,34 @@ class TestFileStorage(unittest.TestCase):
         cityNumber = countCity - currentCityNumber
         allInstanceNumber = stateNumber + cityNumber
         self.assertEqual(allInstanceNumber, allInstance)
+
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing db storage")
+    def test_get(self):
+        """Testing the get methods from the db storage"""
+        newState = State(name="Alemaggne")
+        newCity = City(name="Berlin", state_id=newState.id)
+        newUser = User(email="namme@email.com",
+                       password="password")
+        newPlace = Place(name="Berlin Wall",
+                         city_id=newCity.id,
+                         state_id=newState.id,
+                         user_id=newUser.id)
+        newReview = Review(text="This is a review",
+                           place_id=newPlace.id,
+                           user_id=newUser.id)
+        newAmenity = Amenity(name="Rosenta")
+        newState.save()
+        newCity.save()
+        newUser.save()
+        newPlace.save()
+        newReview.save()
+        newAmenity.save()
+        self.assertEqual(None, models.storage.get("azerty", "qwerty"))
+        self.assertEqual(newCity, models.storage.get(City, newCity.id))
+        self.assertEqual(newUser, models.storage.get(User, newUser.id))
+        self.assertEqual(newPlace, models.storage.get(Place, newPlace.id))
+        self.assertEqual(newReview, models.storage.get(Review, newReview.id))
+        self.assertEqual(newAmenity,
+                         models.storage.get(Amenity, newAmenity.id))
+        self.assertEqual(None, models.storage.get(State, "Not a good ID"))
