@@ -182,4 +182,4 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(newReview, models.storage.get(Review, newReview.id))
         self.assertEqual(newAmenity,
                          models.storage.get(Amenity, newAmenity.id))
-        self.assertEqual(None, models.storage.get(State, "Not a good ID"))
+        self.assertEqual(None, models.storage.get(State, "Not a good ID")
