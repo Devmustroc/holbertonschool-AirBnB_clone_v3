@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 """
-Gérer les liens de commodités et du lieu
+
 """
 
 from api.v1.views import app_views
@@ -10,6 +10,17 @@ from models import storage
 from models.place import Place
 from models.amenity import Amenity
 from os import getenv
+from flasgger import swag_from
+
+
+@app_views.route("/places/<string:place_id>/amenities",
+                 methods=['GET'],
+                 strict_slashes=False)
+@swag_from('documentation/places_amenities/GET_ALL_places_amenities.yml')
+def httpGetAllAmenitiesFromPlaceByID(place_id):
+    """
+    La fonction httpGetAllAmenitiesFromPlaceByID permet de
+
 
 
 @app_views.route("/places/<string:place_id>/amenities",
@@ -35,7 +46,13 @@ def getAllAmenitiesFromPlaceByID(place_id):
 
 
 @app_views.route("/places/<string:place_id>/amenities/<string:amenity_id>",
+
+                 methods=['DELETE'],
+                 strict_slashes=False)
+@swag_from('documentation/places_amenities/DELETE_places_amenities.yml')
+
                  methods=['DELETE'], strict_slashes=False)
+
 def deleteAmenityLinkedToPlaceByID(place_id, amenity_id):
     """
     La fonction deleteAmenityLinkedToPlaceByID
@@ -66,6 +83,14 @@ def deleteAmenityLinkedToPlaceByID(place_id, amenity_id):
 
 
 @app_views.route("/places/<string:place_id>/amenities/<string:amenity_id>",
+
+                 methods=['POST'],
+                 strict_slashes=False)
+@swag_from('documentation/places_amenities/POST_places_amenities.yml')
+def httpLinkAmenityToPlaceByID(place_id, amenity_id):
+    """
+    La fonction httpLinkAmenityToPlaceByID lie un
+
                  methods=['POST'], strict_slashes=False)
 def linkAmenityToPlaceByID(place_id, amenity_id):
     """

@@ -113,7 +113,16 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+    @unittest.skipIf(models.storage_t == 'db', "not testing db storage")
+    def test_count(self):
+        """
+        La fonction test_count est un test pour vérifier si la fonction count fonctionne
+        correctement. Il vérifie si le nombre d'objets créés est égal au nombre
+        d'objets comptés. La fonction test_count vérifie également que toutes les instances sont
+        compté et pas seulement un type d'instance.
 
+        :param self : référence l'instance de classe
+        :return : le nombre de toutes les instances dans la base de données
     @unittest.skipIf(models.storage_t == 'db', "not testing db storage")
     def test_count(self):
         """
@@ -156,6 +165,7 @@ class TestFileStorage(unittest.TestCase):
         cityNumber = countCity - currentCityNumber
         allInstanceNumber = stateNumber + cityNumber
         self.assertEqual(allInstanceNumber, allInstance)
+
 
     @unittest.skipIf(models.storage_t == 'db', "not testing db storage")
     def test_get(self):
