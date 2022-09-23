@@ -157,9 +157,15 @@ class TestDocsDbStorage(unittest.TestCase):
 
     def test_pep8_conformance_in_file_db_storage(self):
         """
+
         La fonction test_pep8_conformance_in_file_db_storage teste que le
         Le fichier models/engine/db_storage.py est conforme à PEP8.
 
+
+        La fonction test_pep8_conformance_in_file_db_storage
+        teste que le
+        Le fichier models/engine/db_storage.py
+        est conforme à PEP8.
         :param self : référence l'instance de classe
         :retour: Rien
         :doc-author: Trelent
@@ -177,6 +183,14 @@ class TestDocsDbStorage(unittest.TestCase):
         le fichier pour les erreurs et les avertissements.
         :param self : Accéder aux variables, méthodes et
         fonctions au sein de la même classe
+        La fonction test_pep8_conformance_in_file_db_storage
+        teste que le
+        le fichier db_storage.py
+        est conforme aux normes PEP8. Il utilise
+        le module pep8 pour vérifier
+        le fichier pour les erreurs et les avertissements.
+        :param self : Accéder aux variables,
+        méthodes et fonctions au sein de la même classe
         :retour: 0
         :doc-author: Trelent
         """
@@ -192,6 +206,10 @@ test_db_storage.py'])
         La fonction test_docstring_in_db_storage_module vérifie si
         le module db_storage.py a une docstring.
         Il vérifie également si la docstring contient au moins 10 caractères.
+        La fonction test_docstring_in_db_storage_module
+        vérifie si le module db_storage.py a une docstring.
+        Il vérifie également si la docstring
+        contient au moins 10 caractères.
         :param self : représente l'instance de l'objet lui-même
         :return: La docstring pour le db_storage
         :doc-author: Trelent
@@ -212,6 +230,16 @@ test_db_storage.py'])
         :param self : représente l'instance de l'objet lui-même
         :return : un tuple contenant la valeur attendue et
         ce qui a été renvoyé par la fonction
+        La fonction test_docstring_class_in_db_storage
+        est un test qui vérifie
+        que la classe DBStorage a une docstring.
+        Il est important de s'assurer que
+        le responsable du code comprend quel est
+        le but de la classe et comment il
+        fonctionne, car cela aide au développement futur et au débogage.
+        :param self : représente l'instance de l'objet lui-même
+        :return : un tuple contenant la valeur attendue
+        et ce qui a été renvoyé par la fonction
         :doc-author: Trelent
         """
 
@@ -230,6 +258,13 @@ test_db_storage.py'])
         :param self : référence l'instance de classe
         :return: Un test pour déterminer si la chaîne __doc__
         est présente et non une chaîne vide
+        vérifie que chaque fonction dans dbStorage a
+        une docstring.
+        La fonction test_docstring_class_in_dbStorage
+        vérifie que chaque classe dans dbStorage a une docstring.
+        :param self : référence l'instance de classe
+        :return: Un test pour déterminer si la
+        chaîne __doc__ est présente et non une chaîne vide
         :doc-author: Trelent
         """
 
@@ -241,6 +276,11 @@ test_db_storage.py'])
             self.assertTrue(len(function[1].__doc__) >= 1,
                             "{:s} method needs a docstring".format(
                                 function[0]))
+                             "{:s} method needs a docstring"
+                             .format(function[0]))
+            self.assertTrue(len(function[1].__doc__) >= 1,
+                            "{:s} method needs a docstring"
+                            .format(function[0]))
 
 
 class TestFileStorage(unittest.TestCase):
@@ -255,7 +295,11 @@ class TestFileStorage(unittest.TestCase):
         d'objets comptés. La fonction test_count vérifie également
         que toutes les instances sont
         compté et pas seulement un type d'instance.
-
+        La fonction test_count est un test pour
+        vérifier si la fonction count fonctionne
+        d'objets comptés. La fonction test_count vérifie
+        également que toutes les instances sont
+        compté et pas seulement un type d'instance.
         :param self : référence l'instance de classe
         :return : le nombre de toutes les instances dans la base de données
         :doc-author: Trelent
@@ -304,6 +348,21 @@ class TestFileStorage(unittest.TestCase):
 
         :param self : référence l'instance de classe
         :return: None pour montrer que l'objet n'est pas dans le
+        La fonction test_get teste la méthode get de
+        la classe de stockage.
+        Il crée de nouveaux objets State, City, User,
+        Place et Review et les enregistre dans
+        le moteur de stockage. Il récupère ensuite
+        chaque objet de la base de données en utilisant leur
+        identifiants uniques (id) et les compare à leur
+        objet correspondant qui a été
+        enregistré en mémoire. La fonction test_get teste
+        également le moment où des arguments
+        non valides sont passés dans
+        la méthode de stockage get.
+        :param self : référence l'instance de classe
+        :return: None pour montrer que l'objet
+        n'est pas dans le
         :doc-author: Trelent
         """
         newState = State(name="Alemaggne")

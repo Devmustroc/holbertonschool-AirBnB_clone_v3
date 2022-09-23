@@ -123,6 +123,19 @@ class TestFileStorage(unittest.TestCase):
 
         :param self : référence l'instance de classe
         :return : le nombre de toutes les instances dans la base de données
+    @unittest.skipIf(models.storage_t == 'db', "not testing db storage")
+    def test_count(self):
+        """
+        La fonction test_count est un test pour
+        vérifier si la fonction count fonctionne
+        correctement. Il vérifie si le nombre
+        d'objets créés est égal au nombre
+        d'objets comptés. La fonction test_count
+        vérifie également que toutes les instances sont
+        compté et pas seulement un type d'instance.
+        :param self : référence l'instance de classe
+        :return : le nombre de toutes
+        les instances dans la base de données
         :doc-author: Trelent
         """
         currentStateInit = models.storage.count(State)
@@ -130,7 +143,7 @@ class TestFileStorage(unittest.TestCase):
         for stateName in stateList:
             newState = State(name=stateName)
             newState.save()
-        countStateResult= models.storage.count(State)
+        countStateResult = models.storage.count(State)
         self.assertEqual(countStateResult - currentStateInit,
                          len(stateList))
         allInstance = models.storage.count()
@@ -157,15 +170,21 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t == 'db', "not testing db storage")
     def test_get(self):
         """
-        La fonction test_get teste la méthode get de la classe de stockage.
-        Il crée de nouveaux objets State, City, User, Place et Review et les enregistre dans
-        le moteur de stockage. Il récupère ensuite chaque objet de la base de données en utilisant leur
-        identifiants uniques (id) et les compare à leur objet correspondant qui a été
-        enregistré en mémoire. La fonction test_get teste également le moment où des arguments non valides sont passés dans
+        La fonction test_get teste la méthode get
+        de la classe de stockage.
+        Il crée de nouveaux objets State, City, User,
+        Place et Review et les enregistre dans
+        le moteur de stockage. Il récupère ensuite
+        chaque objet de la base de données en utilisant leur
+        identifiants uniques (id) et les compare à
+        leur objet correspondant qui a été
+        enregistré en mémoire. La fonction test_get
+        teste également le moment où des arguments
+        non valides sont passés dans
         la méthode de stockage get.
-
         :param self : référence l'instance de classe
-        :return: None pour montrer que l'objet n'est pas dans le
+        :return: None pour montrer que l'objet
+        n'est pas dans le
         :doc-author: Trelent
         """
         newState = State(name="Alemaggne")
